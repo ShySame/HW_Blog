@@ -8,3 +8,7 @@ before_script:
 script:
   - flake8 .
   - python manage.py test
+env:
+  - DJANGO_SECRET_KEY='django'
+  - EMAIL_HOST_PASSWORD='gwr'
+  - DJANGO_ENV='dev'

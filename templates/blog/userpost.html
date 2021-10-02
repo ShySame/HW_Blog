@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+
+{% block title %}List of Posts{% endblock %}
+{% block content %}
+
+    {% if post_list %}
+        <ul>
+
+            {% for post in post_list %}
+
+                <li class="row">
+                    <div class="d-grid mb-2 ">
+                        <button class="btn  btn-info  text-uppercase font" style="margin-right: 20pt"
+                                type="submit">
+                            <a class="d-block text-center mt-2 small " style="color:white;"
+                               href="{% url 'blog:post_update' pk=post.pk %}">Update</a>
+                        </button>
+                    </div>
+
+                    <a href="{% url 'blog:post_detail' pk=post.pk %}">{{ post.title }}</a>   </li>
+
+
+            {% endfor %}
+
+        </ul>
+
+
+
+    {% else %}
+        <p>There are no posts</p>
+
+    {% endif %}
+
+{% endblock %}

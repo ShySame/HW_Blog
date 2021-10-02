@@ -3,24 +3,24 @@
 {% block title %}List of Authors{% endblock %}
 {% block content %}
 
-        {% if user_list%}
-            <ul>
+    {% if user_list %}
+        <ul>
 
-                {% for user in user_list %}
+            {% for user in user_list %}
 
                 <li><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}
-                    ({{ user.first_name }} {{ user.last_name }})</a> - {{ user.num }} posts
+                    ({{ user.first_name }} {{ user.last_name }})</a> - {{ user.num }}
+                    <a href="{% url 'blog:userposts' pk=user.pk%}" >posts</a>
 
                 </li>
-                {% endfor %}
+            {% endfor %}
 
-            </ul>
+        </ul>
 
 
+    {% else %}
+        <p>There are no authors</p>
 
-        {% else %}
-            <p>There are no authors</p>
-
-        {% endif %}
+    {% endif %}
 
 {% endblock %}
