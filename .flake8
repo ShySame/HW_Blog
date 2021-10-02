@@ -2,7 +2,9 @@
 
 ignore =
  DJ08,
- W504
+ W504,
+ F403,
+ F405
 
 exclude =
     .git,

@@ -1,7 +1,7 @@
-from django.urls import path, include, reverse_lazy
-from django.contrib.auth import views as auth_views
+from authorization.views import RegisterFormView, UserEditView, UserView
 
-from authorization.views import RegisterFormView, UserView, UserEditView
+from django.contrib.auth import views as auth_views
+from django.urls import path
 
 urlpatterns = [
     path("register/", RegisterFormView.as_view(), name="register"),
@@ -10,9 +10,11 @@ urlpatterns = [
     path("profile/<int:pk>/", UserView.as_view(), name="profile"),
     path("profile/edit/<int:pk>/", UserEditView.as_view(), name="profile_edit"),
     path('password/change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
-    path('password/change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+    path('password/change/done/', auth_views.PasswordChangeDoneView.as_view(),
+         name='password_change_done'),
     path('password/reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('password/reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password/reset/done/', auth_views.PasswordResetDoneView.as_view(),
+         name='password_reset_done'),
     path(r'password/reset/<uidb64>/<token>/',
          auth_views.PasswordResetConfirmView.as_view(),
          name='password_reset_confirm'),

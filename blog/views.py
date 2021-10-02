@@ -1,14 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import FormMixin
 
 from practice.settings.components.email import EMAIL_HOST_USER
+
 from .forms import CommentForm, HelpForm
-from .models import Post, Comment
+from .models import Comment, Post
 
 
 class IndexView(generic.TemplateView):
@@ -47,14 +48,22 @@ class PostDetailView(FormMixin, generic.DetailView):
         comment = form.save()
         post = self.get_object()
         email = Post.objects.get(id=self.object.id).author.email
-        send_mail('New comment', f"New comment on post: {post}. "
-                                 f"Was written by {comment.username}. "
-                                 f"URL:{reverse('blog:post_detail', kwargs={'pk': self.object.id})}",
+        # -----------just for me-------------------------------
+        send_mail('New comment',
+                  f"New comment on post: {post}. "
+                  f"Was written by {comment.username}. "
+                  f"URL:{reverse('blog:post_detail', kwargs={'pk': self.object.id})}",
                   EMAIL_HOST_USER, ['olyaluchko@gmail.com', ], fail_silently=True)
+        # -----------------------------------------------------
+        send_mail('New comment',
+                  f"New comment on post: {post}. "
+                  f"Was written by {comment.username}. "
+                  f"URL:{reverse('blog:post_detail', kwargs={'pk': self.object.id})}",
+                  'admin@mail.com', [email, ], fail_silently=True)
 
-        comment = Comment(username=comment.username,
-                          text=comment.text, is_published=False,
-                          post_id=post)
+        Comment(username=comment.username,
+                text=comment.text, is_published=False,
+                post_id=post)
         return super(PostDetailView, self).form_valid(form)
 
 

@@ -1,9 +1,9 @@
-from django.contrib.auth import authenticate, login, get_user_model
+from authorization.forms import RegisterForm
+
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic
-
-from authorization.forms import RegisterForm
 
 User = get_user_model()
 

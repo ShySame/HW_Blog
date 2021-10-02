@@ -1,8 +1,8 @@
 import random
-import re
 import sys
 
-from blog.models import Post, Comment
+from blog.models import Comment, Post
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.management.base import BaseCommand, CommandError
@@ -28,20 +28,26 @@ class Command(BaseCommand):
             User.objects.bulk_create(gum_li)
             gum_id = User.objects.values_list('id', flat=True)
             post_li = [Post(title=(fake.text(max_nb_chars=25))[:-1],
-                            text=re.sub("\[|\]|'|,", "", str(fake.paragraphs(nb=random.randint(10, 50)))),
-                            description=re.sub("\[|\]|'|,", "", str(fake.paragraphs(nb=random.randint(1, 5)))),
+                            text=str(fake.paragraphs(nb=random.randint(10, 50))).
+                            replace("[", '').replace("]", '').
+                            replace("'", '').replace(",", ''),
+                            description=str(fake.paragraphs(nb=random.randint(1, 5))).
+                            replace("[", '').replace("]", '').
+                            replace("'", '').replace(",", ''),
                             author_id=random.choice(gum_id),
                             img=fake.image_url(width=random.randint(225, 825),
                                                height=random.randint(225, 825)))
                        for _ in range(1, number)]
 
             Post.objects.bulk_create(post_li)
-            post_id = Post.objects.values_list('id',flat=True)
+            post_id = Post.objects.values_list('id', flat=True)
 
-            com_li=[Comment(username=fake.user_name(),
-                            text=re.sub("\[|\]|'|,", "", str(fake.paragraphs(nb=random.randint(1, 5)))),
-                            is_published=random.choice((True,False)),
-                            post_id=random.choice(post_id)) for _ in range(1, number)]
+            com_li = [Comment(username=fake.user_name(),
+                              text=str(fake.paragraphs(nb=random.randint(1, 5))).
+                              replace("[", '').replace("]", '').
+                              replace("'", '').replace(",", ''),
+                              is_published=random.choice((True, False)),
+                              post_id=random.choice(post_id)) for _ in range(1, number)]
             Comment.objects.bulk_create(com_li)
 
             sys.stdout.write("!SUCCESS!")

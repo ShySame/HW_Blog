@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import environ
-from django.conf import settings
-from split_settings.tools import optional, include
+
+from split_settings.tools import include
 
 # https://github.com/joke2k/django-environ
 env_file = Path(__file__).parent.parent.parent.joinpath("config", ".env")

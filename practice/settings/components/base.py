@@ -20,7 +20,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY. MIDDLEWARE
 X_FRAME_OPTIONS = "DENY"
-DEBUG=True
+DEBUG = True
 # Application definition
 
 SITE_ID = 1
