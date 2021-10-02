@@ -1,0 +1,71 @@
+{% extends "base_generic.html" %}
+{% block title %}List of Posts{% endblock %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+ <div style="font-size: small; color: red">
+     {% for field in form.visible_fields %}
+                            {{ field.errors }}
+                        {% endfor %}</div>
+
+        <div class="form-floating mb-3 mar">
+
+            <label for="id_title" class="lab"> Title:</label>
+            <input type="text" required
+                   class="form-control hei" name=title
+                   id="id_title"
+                   placeholder="" value="{{ post_list.title }}">
+
+        </div>
+
+        <div class="form-floating mb-3 mar">
+
+            <label for="id_description" class="lab"> Description:</label>
+            <input type="text"
+                   class="form-control hei" name=description
+                   id="id_description"
+                   placeholder="" value="{{ post_list.description }}">
+
+        </div>
+
+
+        <div class="form-floating mb-3 mar">
+
+            <label for="id_img" class="lab"> Image URL:</label>
+            <input type="url" required
+                   class="form-control hei" name=img
+                   id="id_img"
+                   placeholder="" value="{{ post_list.img }}">
+
+        </div>
+
+
+        <div class="form-floating mb-3 mar">
+
+            <label for="id_text" class="lab"> Post:</label>
+            <div>
+            <textarea wrap="soft"  name="text" required id="id_text"
+                      maxlength="3500" cols="50" rows="20" >{{ post_list.text }}</textarea></div>
+        </div>
+        <div class="form-floating mb-3 mar" >
+
+            <label for="id_published">Current status: {{ post_list.published }}, publish?</label>
+            <div><p class="small">True:<input style="width: 10pt" type="radio"
+                   class="form-control hei" name=published
+                   id="id_published" value="True"
+            ></p>
+            <p class="small">False:<input style="width: 10pt" type="radio"
+                   class="form-control hei" name=published
+                   id="id_published" value="False"
+            ></p>
+            </div>
+        </div>
+        <div class="d-grid mb-2">
+            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font" type="submit">
+                Update post
+            </button>
+        </div>
+    </form>
+
+
+{% endblock %}

@@ -1,0 +1,13 @@
+[flake8]
+
+ignore =
+ DJ08,
+ W504
+
+exclude =
+    .git,
+    venv,
+    __pycache__,
+    .idea,
+    migrations
+max-line-length = 100

@@ -1,0 +1,43 @@
+{% extends "mini_base.html" %}
+
+{% block title %}<h5 class="card-title text-center mb-5 fw-light fs-5 font">Glad to see you again</h5>{% endblock %}
+{% block content %}
+
+                       <form method="POST">
+                        {% csrf_token %}
+
+                    <div style="font-size: small; color: red">
+                        {% for field in form.visible_fields %}
+                        {{ field.errors }}
+                        {% endfor %}</div>
+                        <div class="form-floating mb-3 mar">
+
+                            <label for="id_username" class="lab"> </label>
+                            <input type="text"
+                                   class="form-control hei" name=username
+                                   id="id_username"
+                                   placeholder="Username">
+
+                        </div>
+
+                        <div class="form-floating mb-3 mar">
+                            <label for="id_password" class="lab"></label>
+                            <input
+                                   type="password" class="form-control hei"
+                                   name="password"
+                                   autocomplete="new-password" required id="id_password"
+                                   placeholder="Password">
+                        </div>
+
+
+                        <div class="d-grid mb-2">
+                            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font" type="submit">
+                                Sign In
+                            </button>
+                            <a class="d-block text-center mt-2 small" href="{% url 'password_reset' %} ">Forgot password?</a>
+                            <a class="d-block text-center mt-2 small" href="{% url 'register' %}">Don't have an account yet? Sign Up</a>
+                        </div>
+
+                    </form>
+
+{% endblock %}

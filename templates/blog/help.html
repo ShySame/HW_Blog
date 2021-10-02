@@ -1,0 +1,48 @@
+{% extends "mini_base.html" %}
+
+{% block title %}<h5 class="card-title text-center mb-5 fw-light fs-5 font">Smth Wrong? Contact Us!</h5>{% endblock %}
+{% block content %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div style="font-size: small; color: red">
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+            {% endfor %}</div>
+        <div class="form-floating mb-3 mar">
+
+            <label for="id_subject" class="lab"> </label>
+            <input type="text"
+                   class="form-control hei" name=subject
+                   id="id_subject"
+                   placeholder="Subject">
+
+        </div>
+        <div class="form-floating mb-3 mar">
+
+            <label for="id_email" class="lab"> </label>
+            <input type="email"
+                   class="form-control hei" name=from_email
+                   id="id_email"
+                   placeholder="E-mail">
+
+        </div>
+        <div class="form-floating mb-3 mar">
+            <label for="id_message" class="lab"></label>
+            <textarea
+                    type="text" class="form-control hei"
+                    name="message" required id="id_message"
+                    placeholder="Message"></textarea>
+        </div>
+
+
+        <div class="d-grid mb-2">
+            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font" type="submit">
+                Send Mail
+            </button>
+             </div>
+
+    </form>
+
+{% endblock %}
