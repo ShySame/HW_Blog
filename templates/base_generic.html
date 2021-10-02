@@ -133,9 +133,10 @@
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 mb-md-0">
                         <li><a href="{% url 'blog:index' %}" class="nav-link px-2 text-secondary">Home</a></li>
                         <li><a href="{% url 'blog:post_list' %}" class="nav-link px-2 text-white">Posts</a></li>
+                        <li><a href="{% url 'blog:user_list' %}" class="nav-link px-2 text-white">Authors</a></li>
                         <li><a href="{% url 'blog:help_me' %}" class="nav-link px-2 text-white">Help Me</a></li>
-{#                        <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>#}
-{#                        <li><a href="#" class="nav-link px-2 text-white">About</a></li>#}
+
+                        {#                        <li><a href="#" class="nav-link px-2 text-white">About</a></li>#}
                     </ul>
 
                     <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -157,7 +158,7 @@
                                 <strong>{{ user.username }}</strong>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="{% url 'blog:post_create'  %}">New Post</a>
+                                <a class="dropdown-item" href="{% url 'blog:post_create' %}">New Post</a>
                                 <a class="dropdown-item" href="{% url 'blog:userposts' pk=user.pk %}">My posts</a>
                                 <a class="dropdown-item" href="{% url 'profile' pk=user.pk %}">Profile</a>
 
@@ -166,8 +167,9 @@
                                 <a class="dropdown-item" href="{% url 'logout' %}?next=/blog">Sign out</a>
                                 <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
 
-                            </div><img src="https://placekitten.com/400/400" alt="" width="42" height="42"
-                                     class="rounded-circle me-2">
+                            </div>
+                            <img src="https://placekitten.com/400/400" alt="" width="42" height="42"
+                                 class="rounded-circle me-2">
                         </div>
                         {#------------------------------------------------------------------------------#}
                     {% else %}

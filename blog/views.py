@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
@@ -11,6 +12,8 @@ from practice.settings.components.email import EMAIL_HOST_USER
 from .forms import CommentForm, HelpForm
 from .models import Comment, Post
 
+User = get_user_model()
+
 
 class IndexView(generic.TemplateView):
     template_name = "base_generic.html"
@@ -18,7 +21,14 @@ class IndexView(generic.TemplateView):
 
 class PostView(generic.ListView):
     model = Post
-    queryset = Post.objects.filter(published=True).annotate(num=Count('comment'))
+    queryset = Post.objects.select_related("author").filter(published=True).annotate(num=Count('comment'))
+    paginate_by = 20
+
+
+class AuthorView(generic.ListView):
+    model = User
+    template_name = 'blog/user_list.html'
+    queryset = User.objects.annotate(num=Count('post'))
     paginate_by = 20
 
 

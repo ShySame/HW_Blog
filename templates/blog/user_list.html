@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block title %}List of Authors{% endblock %}
+{% block content %}
+
+        {% if user_list%}
+            <ul>
+
+                {% for user in user_list %}
+
+                <li><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}
+                    ({{ user.first_name }} {{ user.last_name }})</a> - {{ user.num }} posts
+
+                </li>
+                {% endfor %}
+
+            </ul>
+
+
+
+        {% else %}
+            <p>There are no authors</p>
+
+        {% endif %}
+
+{% endblock %}
