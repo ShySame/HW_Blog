@@ -21,7 +21,8 @@ class IndexView(generic.TemplateView):
 
 class PostView(generic.ListView):
     model = Post
-    queryset = Post.objects.select_related("author").filter(published=True).annotate(num=Count('comment'))
+    queryset = Post.objects.select_related("author").\
+        filter(published=True).annotate(num=Count('comment'))
     paginate_by = 20
 
 
