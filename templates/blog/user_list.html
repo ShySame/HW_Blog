@@ -10,7 +10,7 @@
 
                 <li><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}
                     ({{ user.first_name }} {{ user.last_name }})</a> - {{ user.num }}
-                    <a href="{% url 'blog:userposts' pk=user.pk%}" >posts</a>
+                    <a href="{% url 'blog:authorposts' pk=user.pk%}" >posts</a>
 
                 </li>
             {% endfor %}

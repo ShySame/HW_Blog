@@ -105,13 +105,23 @@ class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class UserPostView(generic.ListView):
     model = Post
-    template_name = "blog/userpost.html"
 
     def get_context_data(self, *args, **kwargs):
-        queryset = Post.objects.filter(author_id=self.kwargs['pk'])
+        queryset = Post.objects.filter(author_id=self.kwargs['pk']).order_by('pk')
         contex = super().get_context_data()
         contex['post_list'] = queryset
         contex['ifuser'] = True
+        return contex
+
+
+class AuthorPostView(generic.ListView):
+    model = Post
+    template_name = 'blog/userpost.html'
+
+    def get_context_data(self, *args, **kwargs):
+        queryset = Post.objects.filter(author_id=self.kwargs['pk']).order_by('pk')
+        contex = super().get_context_data()
+        contex['post_list'] = queryset
         return contex
 
 
