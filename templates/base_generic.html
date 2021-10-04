@@ -207,30 +207,46 @@
                     <!-- section-title -->
                     <div class="vl mar">{% block content %}{% endblock %}
                         {% block pagination %}
-                            {% if page_obj.has_other_pages %}
+                            {% if paginate %}
+
                                 <ul class="pagination">
+
                                     {% if page_obj.has_previous %}
                                         <li><a class="btn btn-outline-info mb-4"
-                                               href="?page={{ page_obj.previous_page_number }}">Prev</a>
-                                        </li>
+                                               href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
                                     {% else %}
-                                        <li class="disabled btn btn-outline-info mb-4"><span>Prev</span></li>
+                                        <li class="btn btn-outline-info mb-4 disabled"><span>Prev</span></li>
                                     {% endif %}
+
+                                    {% if page_obj.number|add:'-4' > 1 %}
+                                        <li><a class="btn btn-outline-info mb-4"
+                                               href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+                                    {% endif %}
+
                                     {% for i in page_obj.paginator.page_range %}
-                                        {% if users.number == i %}
-                                            <li class="active "><span>{{ i }} <span
-                                                    class="sr-only ">(current)</span></span></li>
-                                        {% else %}
-                                            <li><a class="btn btn-outline-info mb-4" href="?page={{ i }}">{{ i }}</a>
+                                        {% if page_obj.number == i %}
+                                            <li class="btn btn-outline-info mb-4 active">
+                                                <span>{{ i }} <span class="sr-only">(current)</span></span>
                                             </li>
+                                        {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                                            <li><a class="btn btn-outline-info mb-4"
+                                                   href="?page={{ i }}">{{ i }}</a></li>
                                         {% endif %}
                                     {% endfor %}
-                                    {% if page_obj.has_next %}
+
+                                    {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
                                         <li><a class="btn btn-outline-info mb-4"
-                                               href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                                               href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+                                    {% endif %}
+
+                                    {% if page_obj.has_next %}
+                                        <li><a class='btn btn-outline-info mb-4'
+                                               href="?page={{ page_obj.next_page_number }}">Next</a>
+                                        </li>
                                     {% else %}
                                         <li class="disabled btn btn-outline-info mb-4"><span>Next</span></li>
                                     {% endif %}
+
                                 </ul>
                             {% endif %}
                         {% endblock %}

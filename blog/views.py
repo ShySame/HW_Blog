@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -21,9 +22,23 @@ class IndexView(generic.TemplateView):
 
 class PostView(generic.ListView):
     model = Post
-    queryset = Post.objects.select_related("author").\
+    queryset = Post.objects.select_related("author"). \
         filter(published=True).annotate(num=Count('comment'))
-    paginate_by = 20
+    paginate_by = 30
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     paginator = Paginator(self.model, self.paginate_by)
+    #     page = int(self.request.GET.get('page'))
+    #
+    #     # try:
+    #     #     page_range = [page - 2, page - 1, page, page + 1]
+    #     # except PageNotAnInteger:
+    #     #     page_range = paginator.page(1)
+    #     # except EmptyPage:
+    #     #     page_range = paginator.page(paginator.num_pages)
+    #     # context['page_range'] = page_range
+    #     return context
 
 
 class AuthorView(generic.ListView):
