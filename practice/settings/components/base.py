@@ -36,6 +36,10 @@ INSTALLED_APPS = [
 
     'authorization',
     'blog',
+
+    'django_extensions',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [

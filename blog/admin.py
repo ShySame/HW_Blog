@@ -17,8 +17,14 @@ class PostAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.action(description='Publish comment')
+def pub_com(modeladmin, request, queryset):
+    queryset.update(is_published=True)
+
+
 @admin.register(Comment)
 class ComAdmin(admin.ModelAdmin):
     list_display = ('username', 'text', 'post', 'is_published')
     list_filter = ('username', 'post')
     ordering = ('is_published', 'post')
+    actions = [pub_com]

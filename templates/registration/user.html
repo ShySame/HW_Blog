@@ -1,14 +1,24 @@
 {% extends "base_generic.html" %}
-{% block title %}Your profile{% endblock %}
+
+{% block title %}
+    {% if request.user.username == user.username %}
+        Your profile
+    {% else %}
+        Profile
+    {% endif %}
+{% endblock %}
+
 {% block content %}
+
     <style type="text/css">
         .us {
             font-family: 'Montserrat', 'PT Sans', sans-serif;
             font-size: medium;
             line-height: 170%;
         }
+
         .h {
-          font-size: xx-large;
+            font-size: xx-large;
         }
     </style>
     <div class="container">
@@ -61,17 +71,18 @@
                                     {{ object.email }}
                                 </div>
                             </div>
-                            <hr>
+                            {% if request.user.username == user.username %}
+                                <hr>
 
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a class="btn btn-info "
-                                       href="{% url 'profile_edit' pk=object.pk %}">Edit</a>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <a class="btn btn-info "
+                                           href="{% url 'profile_edit' pk=object.pk %}">Edit</a>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
-
 
 
                 </div>

@@ -8,9 +8,10 @@
 
             {% for user in user_list %}
 
-                <li><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}
-                    ({{ user.first_name }} {{ user.last_name }})</a> - {{ user.num }}
-                    <a href="{% url 'blog:authorposts' pk=user.pk%}" >posts</a>
+                <li class="row list"><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}
+                    {% if user.first_name or user.last_name %}
+                    ( {{ user.first_name }} {{ user.last_name }} ){% endif %}</a>
+                    <a href="{% url 'blog:authorposts' pk=user.pk%}" >- {{ user.num }} posts</a>
 
                 </li>
             {% endfor %}

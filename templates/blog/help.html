@@ -1,20 +1,23 @@
-{% extends "mini_base.html" %}
+{#{% extends "mini_base.html" %}#}
+{##}
+{#{% block title %}<h5 class="card-title text-center mb-5 fw-light fs-5 font">Smth Wrong? Contact Us!</h5>{% endblock %}#}
+{#{% block content %}#}
 
-{% block title %}<h5 class="card-title text-center mb-5 fw-light fs-5 font">Smth Wrong? Contact Us!</h5>{% endblock %}
-{% block content %}
+<form method="POST" action="{% url 'blog:help_me' %}" class="js-blog-contact">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h4 class="modal-title">Contact Us</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
 
-    <form method="POST">
-        {% csrf_token %}
-
-        <div style="font-size: small; color: red">
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-            {% endfor %}</div>
         <div class="form-floating mb-3 mar">
 
             <label for="id_subject" class="lab"> </label>
             <input type="text"
-                   class="form-control hei" name=subject
+                   class="form-control hei" name=subject required
                    id="id_subject"
                    placeholder="Subject">
 
@@ -23,7 +26,7 @@
 
             <label for="id_email" class="lab"> </label>
             <input type="email"
-                   class="form-control hei" name=from_email
+                   class="form-control hei" name=from_email required
                    id="id_email"
                    placeholder="E-mail">
 
@@ -38,11 +41,12 @@
 
 
         <div class="d-grid mb-2">
-            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font" type="submit">
+            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font"
+                    type="submit">
                 Send Mail
             </button>
-             </div>
+        </div>
+    </div>
+</form>
 
-    </form>
-
-{% endblock %}
+{#{% endblock %}#}

@@ -2,15 +2,18 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import FormMixin
 
-from practice.settings.components.email import EMAIL_HOST_USER
+# from practice.settings.components.email import EMAIL_HOST_USER
 
 from .forms import CommentForm, HelpForm
 from .models import Comment, Post
+from .tasks import need_send_mail
 
 User = get_user_model()
 
@@ -23,20 +26,20 @@ class PostView(generic.ListView):
     model = Post
     queryset = Post.objects.select_related("author"). \
         filter(published=True).annotate(num=Count('comment'))
-    paginate_by = 30
+    paginate_by = 20
 
     # def get_context_data(self, *args, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     paginator = Paginator(self.model, self.paginate_by)
     #     page = int(self.request.GET.get('page'))
     #
-    #     # try:
-    #     #     page_range = [page - 2, page - 1, page, page + 1]
-    #     # except PageNotAnInteger:
-    #     #     page_range = paginator.page(1)
-    #     # except EmptyPage:
-    #     #     page_range = paginator.page(paginator.num_pages)
-    #     # context['page_range'] = page_range
+    #     try:
+    #         page_range = paginator.get_elided_page_range
+    #     except PageNotAnInteger:
+    #         page_range = paginator.page(1)
+    #     except EmptyPage:
+    #         page_range = paginator.page(paginator.num_pages)
+    #     context['page_range'] = page_range
     #     return context
 
 
@@ -74,11 +77,11 @@ class PostDetailView(FormMixin, generic.DetailView):
         post = self.get_object()
         email = Post.objects.get(id=self.object.id).author.email
         # -----------just for me-------------------------------
-        send_mail('New comment',
-                  f"New comment on post: {post}. "
-                  f"Was written by {comment.username}. "
-                  f"URL:{reverse('blog:post_detail', kwargs={'pk': self.object.id})}",
-                  EMAIL_HOST_USER, ['olyaluchko@gmail.com', ], fail_silently=True)
+        # send_mail('New comment',
+        #           f"New comment on post: {post}. "
+        #           f"Was written by {comment.username}. "
+        #           f"URL:{reverse('blog:post_detail', kwargs={'pk': self.object.id})}",
+        #           EMAIL_HOST_USER, ['olyaluchko@gmail.com', ], fail_silently=True)
         # -----------------------------------------------------
         send_mail('New comment',
                   f"New comment on post: {post}. "
@@ -121,7 +124,8 @@ class UserPostView(generic.ListView):
     model = Post
 
     def get_context_data(self, *args, **kwargs):
-        queryset = Post.objects.filter(author_id=self.kwargs['pk']).order_by('pk')
+        queryset = Post.objects.filter(author_id=self.kwargs['pk']). \
+            annotate(num=Count('comment')).order_by('pk')
         contex = super().get_context_data()
         contex['post_list'] = queryset
         contex['ifuser'] = True
@@ -130,31 +134,37 @@ class UserPostView(generic.ListView):
 
 class AuthorPostView(generic.ListView):
     model = Post
-    template_name = 'blog/userpost.html'
 
     def get_context_data(self, *args, **kwargs):
-        queryset = Post.objects.filter(author_id=self.kwargs['pk']).order_by('pk')
+        queryset = Post.objects.filter(author_id=self.kwargs['pk']). \
+            annotate(num=Count('comment')).order_by('pk')
         contex = super().get_context_data()
         contex['post_list'] = queryset
         return contex
 
 
-def contact_form(request):
+def contact_form_save(request, form, template_name):
+    data = dict()
     if request.method == "POST":
-        form = HelpForm(request.POST)
         if form.is_valid():
+            data['form_is_valid'] = True
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
-            send_mail(subject, message, from_email, ['admin@mail.com', ])
+            need_send_mail.apply_async((subject, from_email, message))
+            # send_mail(subject, message, from_email, ['admin@mail.com', ])
             # messages.add_message(request, messages.SUCCESS, 'Message sent')
-            return redirect('blog:index')
+
+        else:
+            data['form_is_valid'] = False
+    context = {'form': form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+
+def contact_form(request):
+    if request.method == "POST":
+        form = HelpForm(request.POST)
     else:
         form = HelpForm()
-    return render(
-        request,
-        "blog/help.html",
-        context={
-            "form": form,
-        }
-    )
+    return contact_form_save(request, form, 'blog/help.html')
