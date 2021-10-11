@@ -2,11 +2,12 @@
 {##}
 {#{% block title %}<h5 class="card-title text-center mb-5 fw-light fs-5 font">Smth Wrong? Contact Us!</h5>{% endblock %}#}
 {#{% block content %}#}
-
+    {% load static %}
+    <link href="{% static 'css/modal_style.css' %}" rel="stylesheet" type="text/css">
 <form method="POST" action="{% url 'blog:help_me' %}" class="js-blog-contact">
     {% csrf_token %}
     <div class="modal-header">
-        <h4 class="modal-title">Contact Us</h4>
+        <h3 class="modal-title modtit" >Contact Us</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

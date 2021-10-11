@@ -1,0 +1,49 @@
+ @import url('https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,400&display=swap');
+
+        body {
+            background: #ffffff;
+            background: linear-gradient(to left, #f6d4ff, #5abeff);
+        }
+
+        .card-img-left {
+            width: 45%;
+            /* Link to your background image using in the property below! */
+            background: scroll center url('https://cdn.pixabay.com/photo/2021/01/29/08/09/doodles-5960094_960_720.jpg');
+            background-size: cover;
+        }
+
+        .btn-login {
+            margin-top: 4%;
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+        }
+
+        .btn-google {
+            color: white !important;
+            background-color: #ea4335;
+        }
+
+        .btn-facebook {
+            color: white !important;
+            background-color: #3b5998;
+        }
+
+        .font {
+            font-family: 'Montserrat', 'PT Sans', sans-serif;
+        }
+
+        .mar {
+            margin-top: 0%;
+            margin-bottom: 7%;
+        }
+
+        .hei {
+            border-radius: 25px;
+            padding: 7%;
+        }
+
+        .lab {
+            width: 100%
+        }

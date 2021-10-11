@@ -3,25 +3,45 @@
 {% block title %}List of Authors{% endblock %}
 {% block content %}
 
-    {% if user_list %}
-        <ul>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Fist Name</th>
+            <th scope="col">Last Name</th>
 
+            <th scope="col">Number of posts</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% if user_list %}
             {% for user in user_list %}
 
-                <li class="row list"><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}
-                    {% if user.first_name or user.last_name %}
-                    ( {{ user.first_name }} {{ user.last_name }} ){% endif %}</a>
-                    <a href="{% url 'blog:authorposts' pk=user.pk%}" >- {{ user.num }} posts</a>
+                <tr>
+                <th scope="row"><a href="{% url 'profile' pk=user.pk %}">{{ user.username }}</a></th>
+                {% if user.first_name %}
+                    <td>{{ user.first_name }}</td>
+                {% else %}
+                    <td>—</td>
+                {% endif %}
+                {% if user.last_name %}
+                    <td>{{ user.last_name }}</td>
+                {% else %}
+                    <td>—</td>
+                {% endif %}
 
-                </li>
+                <td><a href="{% url 'blog:authorposts' pk=user.pk %}">{{ user.num }}</a></td>
+
             {% endfor %}
+        {% else %}
+            <td class="table-warning">There are no authors</td>
+            <td class="table-warning"></td>
+            <td class="table-warning"></td>
+            <td class="table-warning"></td>
+        {% endif %}
+        </tbody>
+    </table>
 
-        </ul>
-
-
-    {% else %}
-        <p>There are no authors</p>
-
-    {% endif %}
 
 {% endblock %}

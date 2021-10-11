@@ -152,8 +152,6 @@ def contact_form_save(request, form, template_name):
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
             need_send_mail.apply_async((subject, from_email, message))
-            # send_mail(subject, message, from_email, ['admin@mail.com', ])
-            # messages.add_message(request, messages.SUCCESS, 'Message sent')
 
         else:
             data['form_is_valid'] = False

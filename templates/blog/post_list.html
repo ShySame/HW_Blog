@@ -39,43 +39,12 @@
 
             {% endfor %}
         {% else %}
-            <p>There are no posts</p>
+
+            <td class="table-warning">There are no posts</td>
+            <td class="table-warning"></td>
+            <td class="table-warning"></td>
         {% endif %}
         </tbody>
     </table>
-{#    {% if post_list %}#}
-    {#        <ul>#}
-    {##}
-    {#            {% for post in post_list %}#}
-    {##}
-    {#                {% if request.user.username == user.username %}#}
-    {#                    {% if  ifuser %}#}
-    {##}
-    {#                        <li class="row">#}
-    {#                            <div class="d-grid mb-2 ">#}
-    {#                                <button class="btn  btn-info  text-uppercase font" style="margin-right: 20pt"#}
-    {#                                        type="submit">#}
-    {#                                    <a class="d-block text-center mt-2 small " style="color:white;"#}
-    {#                                       href="{% url 'blog:post_update' pk=post.pk %}">Update</a>#}
-    {#                                </button>#}
-    {#                            </div>#}
-    {#                            {% else %}#}
-    {#                        <li class="row list">#}
-    {#                    {% endif %}#}
-    {#                {% endif %}#}
-    {##}
-    {#            <a href="{% url 'blog:post_detail' pk=post.pk %}">{{ post.title }}{% if not ifuser %}#}
-    {#                (by {{ post.author.username }}){% endif %}</a> - {{ post.num }} comments#}
-    {##}
-    {#            </li>#}
-    {#            {% endfor %}#}
-    {##}
-    {#        </ul>#}
-    {##}
-    {##}
-    {##}
-    {#    {% else %}#}
-    {#        <p>There are no posts</p>#}
-    {##}
-    {#    {% endif %}#}
+
 {% endblock %}
