@@ -1,9 +1,12 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.db.models import Count
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
+
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import generic
@@ -27,20 +30,6 @@ class PostView(generic.ListView):
     queryset = Post.objects.select_related("author"). \
         filter(published=True).annotate(num=Count('comment'))
     paginate_by = 20
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     paginator = Paginator(self.model, self.paginate_by)
-    #     page = int(self.request.GET.get('page'))
-    #
-    #     try:
-    #         page_range = paginator.get_elided_page_range
-    #     except PageNotAnInteger:
-    #         page_range = paginator.page(1)
-    #     except EmptyPage:
-    #         page_range = paginator.page(paginator.num_pages)
-    #     context['page_range'] = page_range
-    #     return context
 
 
 class AuthorView(generic.ListView):
@@ -105,19 +94,17 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
         return reverse('blog:post_detail', kwargs={'pk': self.object.pk})
 
 
-class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
+class PostUpdateView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
     model = Post
     fields = ['title', 'text', 'img', 'description', 'published']
     template_name = 'blog/post_update_form.html'
+    success_message = "Post updated"
 
     def get_context_data(self, *args, **kwargs):
         queryset = Post.objects.get(id=self.kwargs['pk'])
         contex = super().get_context_data()
         contex['post_list'] = queryset
         return contex
-
-    def get_success_url(self):
-        return reverse('blog:post_detail', kwargs={'pk': self.object.pk})
 
 
 class UserPostView(generic.ListView):
@@ -152,10 +139,13 @@ def contact_form_save(request, form, template_name):
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
             need_send_mail.apply_async((subject, from_email, message))
-            data['status'] = 'success'
-
+            messages.success(request, 'Email was send successfully')
+            context = {'form': form}
+            data['html_form'] = render_to_string(template_name, context, request=request)
+            return JsonResponse(data)
         else:
             data['form_is_valid'] = False
+            messages.error(request, 'Email was not send')
     context = {'form': form}
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)

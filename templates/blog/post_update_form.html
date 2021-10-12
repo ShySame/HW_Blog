@@ -4,6 +4,13 @@
     <form method="POST">
         {% csrf_token %}
  <div style="font-size: small; color: red">
+ {% if messages %}
+     {% for message in messages %}
+         <div class="text-center alert alert-{{ message.tags }}">
+             {{ message|safe }}
+         </div>
+     {% endfor %}
+ {% endif %}
      {% for field in form.visible_fields %}
                             {{ field.errors }}
                         {% endfor %}</div>

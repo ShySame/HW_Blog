@@ -3,6 +3,7 @@
 {#{% block title %}<h5 class="card-title text-center mb-5 fw-light fs-5 font">Smth Wrong? Contact Us!</h5>{% endblock %}#}
 {#{% block content %}#}
 {% load static %}
+
 <link href="{% static 'css/modal_style.css' %}" rel="stylesheet" type="text/css">
 <form method="POST" action="{% url 'blog:help_me' %}" class="js-blog-contact">
     {% csrf_token %}
@@ -12,6 +13,12 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+{% if messages %}
+     {% for message in messages %}
+         <div class="text-center alert-{{ message.tags }}">{{ message|safe }}
+         </div>
+     {% endfor %}
+ {% endif %}
     <div class="modal-body">
 
         <div class="form-floating mb-3 mar">
@@ -21,8 +28,8 @@
                    id="id_subject"
                    placeholder="Subject">
             <div class="small" style="color: red"> {% if form.subject.errors %}
-           {{ form.subject.errors }}
-        {% endif %}</div>
+                {{ form.subject.errors }}
+            {% endif %}</div>
 
         </div>
         <div class="form-floating mb-3 mar">
@@ -32,26 +39,27 @@
                    id="id_email"
                    placeholder="E-mail">
             <div class="small" style="color: red"> {% if form.from_email.errors %}
-           {{ form.from_email.errors }}
-        {% endif %}</div>
+                {{ form.from_email.errors }}
+            {% endif %}</div>
         </div>
         <div class="form-floating mb-3 mar">
             <textarea
                     type="text" class="form-control hei"
                     name="message" id="id_message"
                     placeholder="Message"></textarea>
-        <div class="small" style="color: red"> {% if form.message.errors %}
-           {{ form.message.errors }}
-        {% endif %}</div>
+            <div class="small" style="color: red"> {% if form.message.errors %}
+                {{ form.message.errors }}
+            {% endif %}</div>
         </div>
 
 
         <div class="d-grid mb-2">
-            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font"
+            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase font "
                     type="submit">
                 Send Mail
             </button>
         </div>
+
     </div>
 </form>
 
